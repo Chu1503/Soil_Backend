@@ -5,6 +5,10 @@ import os
 
 app = Flask(__name__)
 
+@app.route('/')
+def index():
+    return 'Soil Backend is running!'
+
 linear_regression_model = joblib.load('linear_regression_model.pkl')
 gradient_boosting_model = joblib.load('gradient_boosting_regressor_model.pkl')
 
