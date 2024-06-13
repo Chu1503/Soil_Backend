@@ -5,14 +5,11 @@ import os
 
 app = Flask(__name__)
 
-# Path to the models directory
 models_dir = os.path.join(os.getcwd(), 'Models')
 
-# Load models
 models = {
     'LinearRegression': joblib.load(os.path.join(models_dir, 'linear_regression_model.pkl')),
     'GradientBoostingRegressor': joblib.load(os.path.join(models_dir, 'gradient_boosting_regressor_model.pkl')),
-    # Add more models as needed
 }
 
 @app.route('/predict', methods=['POST'])
