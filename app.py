@@ -13,6 +13,8 @@ def index():
 linear_regression_model = joblib.load('linear_regression_model.pkl')
 gradient_boosting_model = joblib.load('gradient_boosting_regressor_model.pkl')
 neural_network_model = joblib.load('neural_network_model.pkl')
+knn_model = joblib.load('knn_model.pkl')
+support_vector_regression_model = joblib.load('support_vector_regression_model.pkl')
 
 @app.route('/predict_linearregressor', methods=['POST', 'OPTIONS'])
 def predict_linear():
@@ -54,6 +56,38 @@ def predict_neural_network():
         data = request.json
         features = np.array([data['pH'], data['EC'], data['Ava_N'], data['Ava_P'], data['Ava_K']]).reshape(1, -1)
         prediction = neural_network_model.predict(features)
+        response = jsonify({'predicted_OC': prediction[0]})
+
+    response.headers.add('Access-Control-Allow-Origin', '*')
+    response.headers.add('Access-Control-Allow-Methods', 'POST, OPTIONS')
+    response.headers.add('Access-Control-Allow-Headers', 'Content-Type, X-Auth-Token, Origin, Authorization')
+
+    return response
+
+@app.route('/predict_knn', methods=['POST', 'OPTIONS'])
+def predict_knn():
+    if request.method == 'OPTIONS':
+        response = app.make_default_options_response()
+    else:
+        data = request.json
+        features = np.array([data['pH'], data['EC'], data['Ava_N'], data['Ava_P'], data['Ava_K']]).reshape(1, -1)
+        prediction = knn_model.predict(features)
+        response = jsonify({'predicted_OC': prediction[0]})
+
+    response.headers.add('Access-Control-Allow-Origin', '*')
+    response.headers.add('Access-Control-Allow-Methods', 'POST, OPTIONS')
+    response.headers.add('Access-Control-Allow-Headers', 'Content-Type, X-Auth-Token, Origin, Authorization')
+
+    return response
+
+@app.route('/predict_svr', methods=['POST', 'OPTIONS'])
+def predict_svr():
+    if request.method == 'OPTIONS':
+        response = app.make_default_options_response()
+    else:
+        data = request.json
+        features = np.array([data['pH'], data['EC'], data['Ava_N'], data['Ava_P'], data['Ava_K']]).reshape(1, -1)
+        prediction = support_vector_regression_model.predict(features)
         response = jsonify({'predicted_OC': prediction[0]})
 
     response.headers.add('Access-Control-Allow-Origin', '*')
